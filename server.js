@@ -10,6 +10,9 @@ var logger = new EventEmitter();
 var chat = new EventEmitter();
 var users = [], chatlog = [];
 
+var express = require('express');
+var app = express();
+
 pipeIndexRequest = require('./index_request')
     //listens to message event
 chat.on('message', function(message){
@@ -42,6 +45,7 @@ chat.emit('message', 'shy');
 // });
 
 var server = http.createServer();
+app.use(express.static(__dirname));
 pipeIndexRequest(server);
 // server.on('request', function(request, response){
 //      response.writeHead(200, {'Content-Type': 'text/html'});
@@ -54,9 +58,9 @@ pipeIndexRequest(server);
 // });
 
 
-server.on('request', function(request, response) {
-  console.log("New request coming in...");
-});
+// server.on('request', function(request, response) {
+//   console.log("New request coming in...");
+// });
 
 server.on('request', function(request, response) {
   var newFile = fs.createWriteStream("readme_copy.md");

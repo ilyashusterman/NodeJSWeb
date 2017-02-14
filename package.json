@@ -5,12 +5,15 @@
   "main": "server.js",
   "dependencies": {
     "connect": "^3.5.1",
+    "ejs": "^2.5.5",
+    "express": "^4.14.1",
     "request": "^2.79.0"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "serverjs": "node server.js",
+    "expserver": "node expserver.js"
   },
   "author": "",
   "license": "ISC"
