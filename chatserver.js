@@ -29,7 +29,7 @@ io.on('connection', function (client) {
      //  client.emit("messages", nickname+": "+ message);
    });
 });
-
+//some change
 app.use(express.static(__dirname));
 app.get('/', function (req, res) {
     res.sendFile(__dirname+'/index.html');
