@@ -8,6 +8,7 @@ var url = require('url');
 
 app.get('/', function(request, response){
     response.sendFile(__dirname+"/index.html");
+    console.log(__dirname)
 });
 
 app.get('/tweets/:username', function(request, response){
@@ -16,3 +17,4 @@ app.get('/tweets/:username', function(request, response){
 });
 
 app.listen(8080);
+
