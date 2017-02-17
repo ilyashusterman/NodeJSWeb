@@ -5,7 +5,7 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-
+//var request = require('request');
 // io.on('connection', function(client){
 //     console.log('Client connected...');
 //     // client.emit('messages', {hello: 'world'});
@@ -24,8 +24,11 @@ io.on('connection', function (client) {
    });
    client.on('messages', function (message) {
        var nickname = client.nickname;
+       if (nickname === "" || nickname === undefined){
+           nickname = "undefined";
+       }
        client.broadcast.emit("message", nickname+" : "+ message);
-       io.emit('messages', nickname+" : "+ message)
+       io.emit('messages', nickname+" "+": "+ message);
      //  client.emit("messages", nickname+": "+ message);
    });
 });
