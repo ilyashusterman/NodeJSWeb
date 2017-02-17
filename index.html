@@ -39,14 +39,14 @@
           <a class="navbar-brand" href="#">Chat Application Node</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form" onSubmit="return signedIn()">
+          <form class="navbar-form navbar-right">
             <div class="form-group">
               <input type="text" placeholder="nickname" id="username" class="form-control">
             </div>
             <div class="form-group">
               <input type="password" placeholder="Password" class="form-control">
             </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
+            <button onclick="return signedIn()" class="btn btn-success">Sign in</button>
           </form>
         </div><!--/.navbar-collapse -->
       </div>
@@ -77,8 +77,38 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            ONLINE USERS
+                        </div>
+                        <div class="panel-body">
+                            <ul class="media-list" id="chatters">
+                                <!--<li class="media">-->
+                                    <!--<div class="media-body">-->
+
+                                        <!--<div class="media">-->
+                                            <!--<div class="media-body" >-->
+                                                <!--<h5>Alex Deo | User </h5>-->
+                                                <!--<small class="text-muted">Active From 3 hours</small>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+
+                                    <!--</div>-->
+                                <!--</li>-->
+                            </ul>
+                            <ul class="media-list">
+                                <li class="media" id="status">
+
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
+
       <hr>
 
       <footer>
@@ -107,40 +137,57 @@
         var socket = io.connect('http://localhost:8080');
         $('form').submit(function (e) {
             var message = $('#chat_input').val();
+            if (message === "" || message===undefined){
+                message=' Has been connected to the chat...';
+            }
             socket.emit('messages', message);
             $('#chat_input').val('');
             return false;
         });
 
         socket.on('connect', function(data){
-        $('#status').html('Connected to chat room');
         nickname = document.getElementById("username").value;
-
+//        $('#status').html(nickname+' Connected to chat room');
         socket.emit('join', nickname);
         });
+
+        socket.on('remove chatter', function (name) {
+            console.log("remove chatter name: "+name);
+            $('#chatters  li[data-name='+name+']').remove();
+        });
+
         socket.on('messages', function (data) {
             insertMessage(data)
         });
+
+        socket.on('add chatter', function(name){
+        var chatter = $('<li class="media" data-name='+name+'>' +
+            '<div class="media-body">' +
+            '<div class="media">' +
+            '<div class="media-body" >' +
+            '<h5>'+name+'</h5>' +
+//            '<small class="text-muted">' +
+//            'Active From 3 hours</small>' +
+            '</div></div></div></li>').data('name', name);
+        $('#chatters').append(chatter);
+        console.log(name+' connected!');
+        });
+
         function signedIn(){
             nickname = document.getElementById("username").value;
             socket.emit('join', nickname);
         }
-        function insertMessage(data){
 
+        function insertMessage(data){
             $('#messages').append($('<li class="media"><div class="media-body"><div class="media"><div class="media-body" >').text(
                 data
             ));
-            var time = new Date();
-            $('#messages').append($('<br /><small class="text-muted">').text(
-               time
-            ));
-            $('#messages').append($('</small><hr /></div></div></div></li>'));
-//            $('#messages').append($('<li>').text(data));
+            $('#messages').append($('</div></div></div></li>'));
         }
+
         var insertQuestion = function(question){
             var newQuestion = document.createElement('li');
             newQuestion.innerHTML = question;
-
             var questions = document.getElementsByTagName('ul')[0];
             return questions.appendChild(newQuestion);
         }

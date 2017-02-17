@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    var server = io.connect('http://localhost:8080');
+
+    server.on('question', function(question) {
+        insertQuestion(question);
+    });
+    server.on('answer', function(question, answer) {
+        answerQuestion(question, answer);
+    });
+    var insertQuestion = function(question, answer) {
+    }
+     var answerQuestion = function(question, answer) {
+     }
+</script>
+</html>

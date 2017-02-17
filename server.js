@@ -8,7 +8,7 @@ var EventEmitter = require('events').EventEmitter;
 var logger = new EventEmitter();
 //App chat example event
 var chat = new EventEmitter();
-var users = [], chatlog = [];
+var users = [], chatlog = [], messages=[];
 
 var express = require('express');
 var app = express();
@@ -103,3 +103,4 @@ var file = fs.createReadStream("data.txt");
 
 //console.log("after readable event"); //DEPRECATED
 file.pipe(process.stdout);
+
