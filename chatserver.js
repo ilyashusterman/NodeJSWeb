@@ -35,6 +35,20 @@ var storeMessage = function(name, data){
 
 io.on('connection', function (client) {
 
+       redisClient.lrange("messages", 0, -1, function (err, messages) {
+           messages = messages.reverse();
+       messages.forEach(function (message) {
+           message = JSON.parse(message);
+           client.emit("messages", message.name+ ": "+ message.data);
+       });
+       });
+    redisClient.lrange("names", 0, -1, function (err, chatters) {
+        chatters.forEach(function (chatter) {
+            client.emit('add chatter', chatter);
+        });
+    });
+
+
    client.on('join', function(name){
     client.nickname = name;
        console.log(client.nickname+" has joined!");
@@ -46,13 +60,6 @@ io.on('connection', function (client) {
            });
        });
        redisClient.sadd("chatters", name);
-       redisClient.lrange("messages", 0, -1, function (err, messages) {
-           messages = messages.reverse();
-       messages.forEach(function (message) {
-           message = JSON.parse(message);
-           client.emit("messages", message.name+ ": "+ message.data);
-       });
-       });
    });
    client.on('messages', function (message) {
        var nickname = client.nickname;
@@ -72,10 +79,6 @@ io.on('connection', function (client) {
        io.emit("remove chatter", nickname);
       // client.broadcast.emit("remove chatter", nickname);
        redisClient.srem("chatters", name);
-       // client.get('nickname', function (err, name) {
-       //     client.broadcast.emit("remove chatter", name);
-       //     redisClient.srem("chatters", name);
-       // });
    });
 });
 //some changes
